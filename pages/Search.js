@@ -12,7 +12,10 @@ const Compare = () => {
   const [displayError, setDisplayError] = useState("")
   const [weather, setWeather] = useState("")
   const [report, setReport] = useState([])
+  const [weatherDescription, setWeatherDescription] = useState("")
+
   const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=9cea11792033d87ab898b1ed61c17d8c&units=metric`
+  // * sry for keeping this in frontend, this is only to show my app works and won't be repeated in the future
 
   const getWeather = async (e) => {
     // * Prevents refresh
@@ -30,25 +33,31 @@ const Compare = () => {
       report.push(resp.data.list[39])
       currentDay = report.shift()
       let weather = currentDay.weather[0]
-      console.log(weather.id)
+      let weatherId = weather.id
+      let weatherDesc = weather.description
       let icon
 
-      if (weather.id === 500) {
-        icon = "/rainy.png"
-      } else if (weather.id === 800) {
+      if (weatherId === 800) {
         icon = "/clear.png"
-      } else if (800 < weather.id <= 804) {
-        icon = "/clouds.png"
-      } else if (weather.id === 600 || 600 <= weather.id <= 622) {
-        icon = "/snow.png"
-      } else if (700 <= weather.id <= 781) {
-        icon = "/haze.png"
-      } else if (weather.id === 200 || 200 <= weather.id <= 232) {
+      } else if (weatherId >= 200 && weatherId <= 232) {
         icon = "/storm.png"
+      } else if (
+        (weatherId >= 300 && weatherId <= 321) ||
+        (weatherId >= 500 && weatherId <= 531)
+      ) {
+        icon = "/rainy.png"
+      } else if (weatherId >= 600 && weatherId <= 622) {
+        icon = "/snow.png"
+      } else if (weatherId >= 700 && weatherId <= 781) {
+        icon = "/haze.png"
+      } else if (weatherId >= 801 && weatherId <= 804) {
+        icon = "/clouds.png"
       } else {
         icon = "/sun.png"
       }
+
       setWeather(icon)
+      setWeatherDescription(weatherDesc)
       setDisplayTemp(currentDay.main.temp + "°")
       setReport(report)
     } catch (error) {
@@ -102,6 +111,7 @@ const Compare = () => {
             day={day}
             report={report}
             weather={weather}
+            description={weatherDescription}
           />
         </div>
       </div>

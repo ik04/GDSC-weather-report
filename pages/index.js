@@ -29,9 +29,9 @@ const index = () => {
 export default index
 
 /*
-//todo implement dynamic symbols
+
 todo add text to indicate weather (op)
-//todo implement api protection skip
-todo api backend task (op) 
+todo learn to implement api protection using chatgpt
+
 
 */

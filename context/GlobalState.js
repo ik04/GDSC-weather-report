@@ -6,8 +6,11 @@ const GlobalState = (props) => {
   const [temp, setTemp] = useState()
   const [city, setCity] = useState("Chennai")
   const [report, setReport] = useState([])
-  const [weather, setWeather] = useState("")
+  const [weatherIcon, setWeatherIcon] = useState("")
+  const [weatherDescription, setWeatherDescription] = useState("")
   const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=9cea11792033d87ab898b1ed61c17d8c&units=metric`
+  // * sry for keeping this in frontend, this is only to show my app works and won't be repeated in the future
+
   const d = new Date()
   var day = d.getDay()
   var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -36,24 +39,29 @@ const GlobalState = (props) => {
       currentDay = report.shift()
       let weather = currentDay.weather[0]
       let weatherId = weather.id
-      // console.log(weatherId)
+      let weatherDesc = weather.description
       let icon
-      if (weatherId === 500 || 500 <= weatherId <= 531) {
-        icon = "/rainy.png"
-      } else if (weatherId === 200 || 200 <= weatherId <= 232) {
-        icon = "/storm.png"
-      } else if (weatherId === 600 || 600 <= weatherId <= 622) {
-        icon = "/snow.png"
-      } else if (weatherId === 800) {
+      if (weatherId === 800) {
         icon = "/clear.png"
-      } else if (700 <= weatherId <= 781) {
+      } else if (weatherId >= 200 && weatherId <= 232) {
+        icon = "/storm.png"
+      } else if (
+        (weatherId >= 300 && weatherId <= 321) ||
+        (weatherId >= 500 && weatherId <= 531)
+      ) {
+        icon = "/rainy.png"
+      } else if (weatherId >= 600 && weatherId <= 622) {
+        icon = "/snow.png"
+      } else if (weatherId >= 700 && weatherId <= 781) {
         icon = "/haze.png"
-      } else if (800 < weatherId <= 804) {
+      } else if (weatherId >= 801 && weatherId <= 804) {
         icon = "/clouds.png"
       } else {
         icon = "/sun.png"
       }
-      setWeather(icon)
+
+      setWeatherDescription(weatherDesc)
+      setWeatherIcon(icon)
       setTemp(currentDay.main.temp + "°")
       setReport(report)
     }
@@ -62,7 +70,17 @@ const GlobalState = (props) => {
 
   return (
     <GlobalContext.Provider
-      value={{ weather, setCity, report, fullDays, day, days, temp, city }}
+      value={{
+        weatherDescription,
+        weatherIcon,
+        setCity,
+        report,
+        fullDays,
+        day,
+        days,
+        temp,
+        city,
+      }}
     >
       {props.children}
     </GlobalContext.Provider>
